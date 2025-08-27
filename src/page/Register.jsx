@@ -91,7 +91,7 @@ function Register() {
                         <label className="block font-medium mb-1">Phone No:</label>
                         <input
                             type="tel"
-                            name="number"
+                            name="phonenumber"
                             placeholder="Enter your Phone Number.."
                             value={formData.phonenumber}
                             onChange={handleChange}

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 function Booking() {
-  const selectedCar = useSelector((state) => state.selectedCar);
+  const selectedCar = useSelector((state) => state.selectedCar)
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({//form using 
     fullName: "",
     email: "",
     phone: "",
@@ -14,51 +14,52 @@ function Booking() {
   });
 
   if (!selectedCar)
-    return <p className="p-6 text-red-500">Please select a car first!</p>;
+    return <p className="p-6 text-red-500">Please select a car first!</p>
 
   const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  
+//Basic Valldation
   const validateForm = () => {
-    const { fullName, email, phone, startDate, endDate, paymentMethod } = formData;
+    const { fullName, email, phone, startDate, endDate, paymentMethod } = formData
 
     if (!fullName || !email || !phone || !startDate || !endDate || !paymentMethod) {
       alert("Please fill all fields!");
       return false;
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      alert("Please enter a valid email address.");
+      alert("Please enter a valid email address.")
       return false;
     }
 
-    // Phone number validation (10 digits)
-    const phoneRegex = /^\d{10}$/;
+    
+    const phoneRegex = /^\d{10}$/
     if (!phoneRegex.test(phone)) {
-      alert("Please enter a valid 10-digit phone number.");
+      alert("Please enter a valid 10-digit phone number.")
       return false;
     }
 
-    // Date validation
+    
     if (new Date(endDate) < new Date(startDate)) {
-      alert("End date cannot be before start date.");
-      return false;
+      alert("End date cannot be before start date.")
+      return false
     }
 
-    return true;
-  };
+    return true
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm()) return
 
     alert(
       `Booking confirmed for ${selectedCar.name} from ${formData.startDate} to ${formData.endDate}`
-    );
-    console.log("Booking Data:", { ...formData, car: selectedCar });
-  };
+    )
+    console.log("Booking Data:", { ...formData, car: selectedCar })
+  }
 
   return (
     <div className="p-6 max-w-3xl mx-auto">

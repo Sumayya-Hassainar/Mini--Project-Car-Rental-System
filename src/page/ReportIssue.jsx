@@ -8,32 +8,32 @@ function ReportIssue() {
     description: "",
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({})
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   };
 
   const validate = () => {
-    let newErrors = {};
-    if (!formData.carId) newErrors.carId = "Car ID is required";
-    if (!formData.issue) newErrors.issue = "Issue type is required";
-    if (!formData.description) newErrors.description = "Description is required";
-    return newErrors;
-  };
+    let newErrors = {}
+    if (!formData.carId) newErrors.carId = "Car ID is required"
+    if (!formData.issue) newErrors.issue = "Issue type is required"
+    if (!formData.description) newErrors.description = "Description is required"
+    return newErrors
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const newErrors = validate();
+    e.preventDefault()
+    const newErrors = validate()
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+      setErrors(newErrors)
     } else {
-      alert("Issue reported successfully!");
-      console.log("Reported Issue:", formData);
-      setFormData({ carId: "", issue: "", description: "" });
-      setErrors({});
+      alert("Issue reported successfully!")
+      console.log("Reported Issue:", formData)
+      setFormData({ carId: "", issue: "", description: "" })
+      setErrors({})
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-6">
@@ -100,7 +100,7 @@ function ReportIssue() {
         </form>
       </div>
     </div>
-  );
+  )
 }
 
 export default ReportIssue;

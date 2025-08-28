@@ -7,52 +7,52 @@ function Contact() {
     email: "",
     subject: "",
     message: ""
-  });
+  })
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({})
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
-    });
-  };
-
+    })
+  }
+//form validation
   const validate = () => {
-    let newErrors = {};
+    let newErrors = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+      newErrors.name = "Name is required"
     }
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = "Email is required"
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Enter a valid email address";
+      newErrors.email = "Enter a valid email address"
     }
     if (!formData.subject.trim()) {
-      newErrors.subject = "Subject is required";
+      newErrors.subject = "Subject is required"
     }
     if (!formData.message.trim()) {
-      newErrors.message = "Message cannot be empty";
+      newErrors.message = "Message cannot be empty"
     } else if (formData.message.length < 10) {
-      newErrors.message = "Message should be at least 10 characters long";
+      newErrors.message = "Message should be at least 10 characters long"
     }
 
-    setErrors(newErrors);
+    setErrors(newErrors)
 
-    return Object.keys(newErrors).length === 0;
-  };
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (validate()) {
-      alert("Message sent successfully!");
-      console.log("Form Data:", formData);
-      setFormData({ name: "", email: "", subject: "", message: "" });
-      setErrors({});
+      alert("Message sent successfully!")
+      console.log("Form Data:", formData)
+      setFormData({ name: "", email: "", subject: "", message: "" })
+      setErrors({})
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-6">
@@ -126,7 +126,7 @@ function Contact() {
         </form>
       </div>
     </div>
-  );
+  )
 }
 
 export default Contact;

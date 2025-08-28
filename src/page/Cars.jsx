@@ -13,7 +13,7 @@ function Cars() {
   const searchTerm = useSelector((state) => state.search.searchTerm)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+//fething data using axios
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -29,7 +29,7 @@ function Cars() {
     }
     fetchCars()
   }, [])
-
+//search option add
   const filteredCars = cars.filter(
     (car) =>
       car.name && car.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -70,7 +70,7 @@ function Cars() {
               >
                 Book Now
               </button>
-           
+           {/*report issue link  */}
 
 <Link
   to="/report-issue"

@@ -6,4 +6,4 @@ export const store = configureStore({
     selectedCar:carReducer,
     search: searchReducer
   }
-});
+})

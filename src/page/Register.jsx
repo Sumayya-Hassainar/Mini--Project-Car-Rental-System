@@ -9,7 +9,9 @@ function Register() {
         phonenumber: "",
         companyName: "",
         licenseNumber: ""
-    })
+    });
+
+    const [errors, setErrors] = useState({})
 
     const handleChange = (e) => {
         setFormData({
@@ -18,11 +20,55 @@ function Register() {
         })
     }
 
+    const validateForm = () => {
+        let newErrors = {}
+
+        // Name validation
+        if (!formData.name || formData.name.length < 3) {
+            newErrors.name = "Name must be at least 3 characters long"
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!formData.email || !emailRegex.test(formData.email)) {
+            newErrors.email = "Enter a valid email address"
+        }
+
+        // Password validation
+        if (!formData.password || formData.password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters long"
+        }
+
+        // Phone validation (only if filled, allow 10 digits)
+        const phoneRegex = /^\d{10}$/
+        if (!formData.phonenumber || !phoneRegex.test(formData.phonenumber)) {
+            newErrors.phonenumber = "Enter a valid 10-digit phone number"
+        }
+
+        // Agency-specific validation
+        if (formData.role === "Agency") {
+            if (!formData.companyName) {
+                newErrors.companyName = "Company Name is required for Agency"
+            }
+            if (!formData.licenseNumber) {
+                newErrors.licenseNumber = "License Number is required for Agency"
+            }
+        }
+
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return; 
+        }
+
         localStorage.setItem("userData", JSON.stringify(formData))
         alert("Registration successful!")
-        console.log(formData)
+        console.log(formData);
     }
 
     return (
@@ -40,7 +86,7 @@ function Register() {
                             name="role"
                             value={formData.role}
                             onChange={handleChange}
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2"
                         >
                             <option value="Individual">Individual</option>
                             <option value="Agency">Agency</option>
@@ -56,9 +102,10 @@ function Register() {
                             placeholder="Enter your full name"
                             value={formData.name}
                             onChange={handleChange}
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2" 
                             required
                         />
+                        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                     </div>
 
                     <div>
@@ -70,8 +117,9 @@ function Register() {
                             value={formData.email}
                             onChange={handleChange}
                             className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                            required
+
                         />
+                        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                     </div>
 
                     <div>
@@ -84,7 +132,9 @@ function Register() {
                             onChange={handleChange}
                             className="w-full border border-gray-300 rounded-lg px-3 py-2"
                             required
+
                         />
+                        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
                     </div>
 
                     <div>
@@ -92,10 +142,14 @@ function Register() {
                         <input
                             type="tel"
                             name="phonenumber"
-                            placeholder="Enter your Phone Number.."
+                            placeholder="Enter your Phone Number"
                             value={formData.phonenumber}
                             onChange={handleChange}
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2" />
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                        />
+                        {errors.phonenumber && (
+                            <p className="text-red-500 text-sm">{errors.phonenumber}</p>
+                        )}
                     </div>
 
                     {/* Extra fields for Agencies */}
@@ -112,6 +166,9 @@ function Register() {
                                     className="w-full border border-gray-300 rounded-lg px-3 py-2"
                                     required
                                 />
+                                {errors.companyName && (
+                                    <p className="text-red-500 text-sm">{errors.companyName}</p>
+                                )}
                             </div>
 
                             <div>
@@ -125,6 +182,9 @@ function Register() {
                                     className="w-full border border-gray-300 rounded-lg px-3 py-2"
                                     required
                                 />
+                                {errors.licenseNumber && (
+                                    <p className="text-red-500 text-sm">{errors.licenseNumber}</p>
+                                )}
                             </div>
                         </>
                     )}

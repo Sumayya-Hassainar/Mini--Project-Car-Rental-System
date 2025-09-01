@@ -1,7 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("individual"); // default role = individual
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const openLogin = localStorage.getItem("openLogin");
+    if (openLogin === "true") {
+      setIsOpen(true);
+      localStorage.removeItem("openLogin");
+    }
+  }, []);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    // 🔹 Save login details (basic simulation)
+    localStorage.setItem("email", email);
+    localStorage.setItem("role", role);
+    localStorage.setItem("isLoggedIn", "true");
+
+    // 🔹 Navigate based on role
+    if (role === "individual") {
+      navigate("/cars");
+    } else if (role === "agency") {
+      navigate("/agencydashboard");
+    }
+
+    setIsOpen(false); // close modal
+  };
 
   return (
     <header className="bg-indigo-950 text-white p-4 shadow-md">
@@ -41,17 +73,35 @@ function Header() {
             </button>
 
             <h2 className="text-xl font-bold mb-4 text-gray-800">Login</h2>
-            <form className="flex flex-col gap-3">
+
+            <form className="flex flex-col gap-3" onSubmit={handleLogin}>
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
                 className="border p-2 rounded text-black"
+                required
               />
               <input
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 className="border p-2 rounded text-black"
+                required
               />
+
+              {/* 🔹 Role selector */}
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="border p-2 rounded text-black"
+              >
+                <option value="individual">Individual</option>
+                <option value="agency">Agency</option>
+              </select>
+
               <button
                 type="submit"
                 className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
@@ -63,7 +113,8 @@ function Header() {
         </div>
       )}
     </header>
-  )
+  );
 }
 
 export default Header;
+

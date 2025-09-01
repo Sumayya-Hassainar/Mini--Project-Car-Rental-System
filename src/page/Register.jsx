@@ -65,10 +65,18 @@ function Register() {
         if (!validateForm()) {
             return; 
         }
+ localStorage.setItem("userData", JSON.stringify(formData))
 
-        localStorage.setItem("userData", JSON.stringify(formData))
-        alert("Registration successful!")
-        console.log(formData);
+    //  Add a flag for login modal
+    localStorage.setItem("openLogin", "true")
+
+    alert("Registration successful! Redirecting to login...")
+
+    // Redirect to homepage (where Header is shown)
+    window.location.href = "/"
+
+      
+        
     }
 
     return (

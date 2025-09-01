@@ -1,12 +1,12 @@
 // src/components/Navbar.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setSearchTerm } from "../redux/searchSlice";
+import { useDispatch, useSelector } from "react-redux"
+import { setSearchTerm } from "../redux/searchSlice"
 
 function Navbar() {
   const dispatch = useDispatch();
-  const searchTerm = useSelector((state) => state.search.searchTerm);
+  const searchTerm = useSelector((state) => state.search.searchTerm)
 
   return (
     <nav className="bg-gray-800 text-white py-3 px-6 flex flex-col sm:flex-row justify-between items-center gap-12">

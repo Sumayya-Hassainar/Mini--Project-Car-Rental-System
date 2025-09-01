@@ -6,13 +6,13 @@ function ReportIssue() {
     carId: "",
     issue: "",
     description: "",
-  });
+  })
 
   const [errors, setErrors] = useState({})
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
-  };
+  }
 
   const validate = () => {
     let newErrors = {}

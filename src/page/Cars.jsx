@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { setCar } from "../redux/carSlice";
- import { Link } from "react-router-dom";
+
 
 function Cars() {
   const [cars, setCars] = useState([])
@@ -13,35 +13,44 @@ function Cars() {
   const searchTerm = useSelector((state) => state.search.searchTerm)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-//fething data using axios
+
   useEffect(() => {
     const fetchCars = async () => {
       try {
+        // API cars
         const res = await axios.get(
           "https://my-json-server.typicode.com/sumayya-hassainar/api/cars"
         )
-        setCars(res.data)
+        const apiCars = res.data
+
+        // Agency cars from localStorage
+        const localCars = JSON.parse(localStorage.getItem("agencyCars")) || [];
+
+        // Combine both
+        setCars([...apiCars, ...localCars])
       } catch (err) {
         setError("Failed to load cars")
       } finally {
         setLoading(false)
       }
     }
+
     fetchCars()
   }, [])
-//search option add
+
+  // Filter by search
   const filteredCars = cars.filter(
     (car) =>
       car.name && car.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const handleBookNow = (car) => {
-    dispatch(setCar(car)); // store selected car in Redux
-    navigate("/booking");
+    dispatch(setCar(car)) // store selected car in Redux
+    navigate("/booking")
   }
 
-  if (loading) return <p className="p-6">Loading cars...</p>;
-  if (error) return <p className="p-6 text-red-500">{error}</p>;
+  if (loading) return <p className="p-6">Loading cars...</p>
+  if (error) return <p className="p-6 text-red-500">{error}</p>
 
   return (
     <div className="p-6">
@@ -53,7 +62,7 @@ function Cars() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {filteredCars.map((car) => (
             <div
-              key={car.id}
+              key={car.id || Math.random()}
               className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
             >
               <img
@@ -70,15 +79,15 @@ function Cars() {
               >
                 Book Now
               </button>
-           {/*report issue link  */}
 
-<Link
-  to="/report-issue"
-  className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600"
->
-  Report Issue
-</Link>
 
+              {/* Report issue link */}
+              <Link
+                to="/report-issue"
+                className="mt-2 inline-block bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600"
+              >
+                Report Issue
+              </Link>
             </div>
           ))}
         </div>

@@ -1,42 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
 function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("individual"); // default role = individual
+  const [isOpen, setIsOpen] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [role, setRole] = useState("individual")// default role
+  const navigate = useNavigate()
 
-  const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
-    const openLogin = localStorage.getItem("openLogin");
+    const openLogin = localStorage.getItem("openLogin")
     if (openLogin === "true") {
-      setIsOpen(true);
-      localStorage.removeItem("openLogin");
+      setIsOpen(true)
+      localStorage.removeItem("openLogin")
     }
-  }, []);
+  }, [])
 
   const handleLogin = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    // 🔹 Save login details (basic simulation)
-    localStorage.setItem("email", email);
-    localStorage.setItem("role", role);
-    localStorage.setItem("isLoggedIn", "true");
-
-    // 🔹 Navigate based on role
-    if (role === "individual") {
-      navigate("/cars");
-    } else if (role === "agency") {
-      navigate("/agencydashboard");
+    // Fixed agency credentials
+    const agencyCreds = {
+      email: "agency@easycar.com",
+      password: "agency123",
     }
 
-    setIsOpen(false); // close modal
+    if (role === "agency") {
+      if (email === agencyCreds.email && password === agencyCreds.password) {
+        localStorage.setItem("email", email)
+        localStorage.setItem("role", "agency")
+        localStorage.setItem("isLoggedIn", "true")
+        navigate("/agencydashboard")
+        setIsOpen(false)
+      } else {
+        alert("Invalid Agency credentials! Use:\nEmail: agency@easycar.com\nPassword: agency123");
+      }
+    } else {
+      if (email && password) {
+        localStorage.setItem("email", email);
+        localStorage.setItem("role", "individual");
+        localStorage.setItem("isLoggedIn", "true");
+        navigate("/cars");
+        setIsOpen(false);
+      } else {
+        alert("Please enter valid email and password!");
+      }
+    }
   };
 
   return (
-    <header className="bg-indigo-950 text-white p-4 shadow-md">
+    <header
+      className={`p-4 shadow-md transition-colors duration-300 
+        ${theme === "light" ? "bg-white text-gray-900" : "bg-indigo-950 text-white"}
+      `}
+    >
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3">
@@ -47,32 +67,48 @@ function Header() {
           />
           <div>
             <h1 className="text-xl md:text-2xl font-bold">Easy Car</h1>
-            <p className="text-sm text-gray-300">Rent your dream car easily</p>
+            <p className="text-sm opacity-80">Rent your dream car easily</p>
           </div>
         </div>
 
-        {/* Login Button */}
-        <button
-          onClick={() => setIsOpen(true)}
-          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium"
-        >
-          Login
-        </button>
+        {/* Right side buttons */}
+        <div className="flex items-center gap-3">
+          {/* Toggle Theme */}
+          <button
+            onClick={toggleTheme}
+            className="px-3 py-2 rounded-lg border text-sm
+              bg-gray-100 text-black hover:bg-gray-200
+              dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
+            "
+          >
+            {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+          </button>
+
+          {/* Login Button */}
+          <button
+            onClick={() => setIsOpen(true)}
+            className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium text-white"
+          >
+            Login
+          </button>
+        </div>
       </div>
 
-      {/* Modal */}
+      {/* Login Modal */}
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-80 relative">
+          <div className={`p-6 rounded-lg shadow-lg w-80 relative transition-colors duration-300 
+              ${theme === "light" ? "bg-white text-black" : "bg-gray-900 text-white"}
+          `}>
             {/* Close */}
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
+              className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
             >
               ✖
             </button>
 
-            <h2 className="text-xl font-bold mb-4 text-gray-800">Login</h2>
+            <h2 className="text-xl font-bold mb-4">Login</h2>
 
             <form className="flex flex-col gap-3" onSubmit={handleLogin}>
               <input
@@ -91,8 +127,7 @@ function Header() {
                 className="border p-2 rounded text-black"
                 required
               />
-
-              {/* 🔹 Role selector */}
+              
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
@@ -113,6 +148,7 @@ function Header() {
         </div>
       )}
     </header>
+
   );
 }
 

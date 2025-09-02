@@ -13,7 +13,7 @@ import ProtectedRoute from "./router/ProtectedRoute";
 import IssueManagement from "./agency/IssueManagement";
 import { useTheme } from "./context/ThemeContext";
 import ErrorPage from "./page/ErrorPage";
-import BookingStatus from "./agency/Bookingstatus";
+import BookingStatus from "./agency/BookingStatus";
 
 // 👉 Import new pages
 import PaymentPage from "./page/PaymentPage";

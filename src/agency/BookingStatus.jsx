@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { updateBookingStatus, deleteBooking, updateBookingLocation } from "../redux/bookingSlice";
+import { Link } from "react-router-dom";
 
 function BookingStatus() {
   const bookings = useSelector((state) => state.booking.bookings);
@@ -25,7 +26,21 @@ function BookingStatus() {
 
   return (
     <div className="p-6">
+       
+      
+        
       <h1 className="text-2xl font-bold mb-4">All Bookings</h1>
+            
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    to="/agency-tracking"
+                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                  >
+                    Agency Tracking
+                  </Link>
+      
+                            </div>
+
       {bookings.length === 0 ? (
         <p>No bookings yet.</p>
       ) : (
@@ -74,11 +89,13 @@ function BookingStatus() {
                 Delete
               </button>
             </div>
+           
           </div>
         ))
       )}
     </div>
-  );
+
+  )
 }
 
 export default BookingStatus;

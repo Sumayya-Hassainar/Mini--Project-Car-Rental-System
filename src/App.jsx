@@ -19,6 +19,8 @@ import BookingStatus from "./agency/BookingStatus";
 import PaymentPage from "./page/PaymentPage";
 import ConfirmationPage from "./page/ConfirmationPage";
 import CarTracking from "./page/CarTracking";
+import AgencyTracking from "./agency/AgencyTracking";
+import CarAvailability from "./page/CarAvailability";
 
 function App() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -72,11 +74,19 @@ function App() {
                     path: "car-tracking",
                     element: (
                         <ProtectedRoute allowedRoles={["individual"]}>
-                            <CarTracking/>
+                            <CarTracking />
                         </ProtectedRoute>
                     ),
                 },
-
+                 {
+                    path: "car-availability/:carId",
+                    element: (
+                        <ProtectedRoute allowedRoles={["individual"]}>
+                            <CarAvailability />
+                        </ProtectedRoute>
+                    ),
+                },
+                
 
                 // Agency Routes
                 {
@@ -103,6 +113,15 @@ function App() {
                         </ProtectedRoute>
                     ),
                 },
+                {
+                    path: "agency-tracking",
+                    element: (
+                        <ProtectedRoute allowedRoles={["agency"]}>
+                            <AgencyTracking />
+                        </ProtectedRoute>
+                    ),
+                },
+
             ],
         },
     ]);
@@ -111,7 +130,7 @@ function App() {
         <div
             className={
                 theme === "dark"
-                    ? "bg-gray-900 text-white min-h-screen"
+                    ? "bg-black text-light min-h-screen"
                     : "bg-white text-black min-h-screen"
             }
         >

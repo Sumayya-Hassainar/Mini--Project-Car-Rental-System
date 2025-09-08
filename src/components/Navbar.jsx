@@ -1,11 +1,11 @@
-// src/components/Navbar.jsx
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
 import { setSearchTerm } from "../redux/searchSlice"
 
 function Navbar() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const searchTerm = useSelector((state) => state.search.searchTerm)
 
   return (
@@ -17,6 +17,7 @@ function Navbar() {
         <Link to="/booking" className="hover:text-blue-400 font-medium">Booking</Link>
         <Link to="/register" className="hover:text-blue-400 font-medium">Register</Link>
         <Link to="/contact" className="hover:text-blue-400 font-medium">Contact</Link>
+        
       </div>
 
       {/* Search Bar */}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Booking() {
   const selectedCar = useSelector((state) => state.selectedCar);
@@ -15,10 +15,9 @@ function Booking() {
 
   const navigate = useNavigate();
 
-  if (!selectedCar)
-    return (
-      <p className="p-6 text-red-500">⚠ Please select a car first!</p>
-    );
+  if (!selectedCar) {
+    return <p className="p-6 text-red-500">⚠ Please select a car first!</p>;
+  }
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,7 +47,8 @@ function Booking() {
     e.preventDefault();
     if (!validateForm()) return;
 
-    // 👉 Redirect to payment page with booking data
+
+    // 👉 Redirect to payment page
     navigate("/payment", {
       state: {
         bookingData: { ...formData, car: selectedCar, status: "Pending" },
@@ -62,10 +62,11 @@ function Booking() {
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 bg-white p-6 rounded shadow"
+        className="space-y-4 bg-white p-6 rounded-lg shadow-md"
       >
-        <h2 className="text-xl font-semibold mb-4">Book Car</h2>
-        <div className="flex gap-4 mb-4">
+        {/* Car Info */}
+        <h2 className="text-xl font-semibold mb-4">Car Details</h2>
+        <div className="flex gap-4 mb-6">
           <img
             src={selectedCar.image || "https://via.placeholder.com/150"}
             alt={selectedCar.name}
@@ -74,55 +75,80 @@ function Booking() {
           <div>
             <p className="font-semibold">{selectedCar.name}</p>
             <p>Color: {selectedCar.color}</p>
-            <p className="font-bold">₹{selectedCar.price}</p>
+            <p className="font-bold text-green-600">₹{selectedCar.price}</p>
           </div>
         </div>
 
+        {/* User Info */}
+        <h2 className="text-lg font-semibold">Your Details</h2>
+        <label>Name:</label>
         <input
           type="text"
           name="fullName"
-          placeholder="Full Name"
           value={formData.fullName}
           onChange={handleChange}
           className="w-full border px-3 py-2 rounded"
           required
         />
+
+        <label>Email:</label>
         <input
           type="email"
           name="email"
-          placeholder="Email"
           value={formData.email}
           onChange={handleChange}
           className="w-full border px-3 py-2 rounded"
           required
         />
+
+        <label>Phone:</label>
         <input
           type="tel"
           name="phone"
-          placeholder="Phone Number"
           value={formData.phone}
           onChange={handleChange}
           className="w-full border px-3 py-2 rounded"
           required
         />
+
+        {/* Booking Dates */}
         <div className="flex gap-4">
-          <input
-            type="date"
-            name="startDate"
-            value={formData.startDate}
-            onChange={handleChange}
-            className="w-1/2 border px-3 py-2 rounded"
-            required
-          />
-          <input
-            type="date"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleChange}
-            className="w-1/2 border px-3 py-2 rounded"
-            required
-          />
+          <div className="flex flex-col w-1/2">
+            <label>Start Date:</label>
+            <input
+              type="date"
+              name="startDate"
+              value={formData.startDate}
+              onChange={handleChange}
+              className="border px-3 py-2 rounded"
+              required
+            />
+          </div>
+          <div className="flex flex-col w-1/2">
+            <label>End Date:</label>
+            <input
+              type="date"
+              name="endDate"
+              value={formData.endDate}
+              onChange={handleChange}
+              className="border px-3 py-2 rounded"
+              required
+            />
+          </div>
         </div>
+
+        {/* Availability Link */}
+        <div className="mt-2">
+          <Link
+            to={`/car-availability/${selectedCar.id}`}
+            className="text-blue-600 underline"
+          >
+            Check Availability
+          </Link>
+        </div>
+
+        {/* Payment Option */}
+        <label>Payment Method:</label>
         <select
           name="paymentMethod"
           value={formData.paymentMethod}
@@ -135,6 +161,7 @@ function Booking() {
           <option value="Cash">Cash on Delivery</option>
         </select>
 
+        {/* Submit */}
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
